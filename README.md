@@ -1,6 +1,6 @@
 # Bounded Adjudication
 
-[![Agent Skill](https://skills.sh/b/kylehodgson/bounded-adjudication)](https://skills.sh/kylehodgson/bounded-adjudication)
+[![Agent Skill](https://skills.sh/b/kylejtobin/bounded-adjudication)](https://skills.sh/kylejtobin/bounded-adjudication)
 
 AI coding agents review your work with full reasoning capability and no constraints on what criteria they apply. They can invent a novel objection on any edit. They can wave something through because the context is long and the pattern looks close enough. Their judgment is unbounded. This is the same problem human reviewers have, except it runs on every single write.
 
@@ -63,7 +63,7 @@ Two discovery references ship with the skill. **Structural discovery** covers pr
 ### As a project skill
 
 ```
-git clone https://github.com/kylehodgson/bounded-adjudication .claude/skills/bounded-adjudication
+git clone https://github.com/kylejtobin/bounded-adjudication .claude/skills/bounded-adjudication
 ```
 
 To ensure continuity across sessions, add a reference in your project's `CLAUDE.md`:

@@ -4,7 +4,7 @@ description: "Build constitutional review infrastructure for AI-assisted develop
 license: MIT
 compatibility: "Claude Code or any agent with hooks support (PreToolUse/PostToolUse)"
 metadata:
-  author: kylehodgson
+  author: kylejtobin
   version: "1.0.0"
 ---
 
