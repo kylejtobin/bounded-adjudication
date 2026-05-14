@@ -2,6 +2,10 @@
 name: bounded-adjudication
 description: "Build constitutional review infrastructure for AI-assisted development. Use when the user wants to constrain agent judgment to closed evidence vocabularies, set up code review gates, create review rubrics, add pre/post edit hooks, or establish bounded adjudication for their project. Triggers include: 'bounded adjudication', 'review gates', 'adjudication rubric', 'constrain judgment', 'evidence shapes', 'code review hooks', or any request to formalize architectural standards into enforceable review infrastructure."
 license: MIT
+compatibility: "Claude Code or any agent with hooks support (PreToolUse/PostToolUse)"
+metadata:
+  author: kylehodgson
+  version: "1.0.0"
 ---
 
 # Bounded Adjudication

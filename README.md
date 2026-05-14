@@ -1,5 +1,7 @@
 # Bounded Adjudication
 
+[![Agent Skill](https://skills.sh/b/kylehodgson/bounded-adjudication)](https://skills.sh/kylehodgson/bounded-adjudication)
+
 AI coding agents review your work with full reasoning capability and no constraints on what criteria they apply. They can invent a novel objection on any edit. They can wave something through because the context is long and the pattern looks close enough. Their judgment is unbounded. This is the same problem human reviewers have, except it runs on every single write.
 
 Bounded adjudication is three constraints on a reviewer, human or machine.
@@ -44,7 +46,7 @@ Building bounded adjudication for a specific project is domain analysis. The har
 
 ## The Skill
 
-This repository is an installable [Agent Skill](https://agentskills.io). It guides you through the six questions, building a worksheet collaboratively as you go. The agent reads your code in service of the conversation, forming hypotheses about your project's structural commitments for you to confirm or correct. You drive what gets examined. The agent makes your understanding precise.
+This repository is an installable [Agent Skill](https://agentskills.io) following the [open specification](https://agentskills.io/specification). It guides you through the six questions, building a worksheet collaboratively as you go. The agent reads your code in service of the conversation, forming hypotheses about your project's structural commitments for you to confirm or correct. You drive what gets examined. The agent makes your understanding precise.
 
 When the worksheet is complete and passes a quality gate, the skill generates your hooks configuration and gate rubric directly into your project's `.claude/` directory.
 
@@ -52,13 +54,19 @@ Two discovery references ship with the skill. **Structural discovery** covers pr
 
 ## Installation
 
-Clone into your project's skills directory:
+### As a plugin
+
+```
+/plugin install bounded-adjudication
+```
+
+### As a project skill
 
 ```
 git clone https://github.com/kylehodgson/bounded-adjudication .claude/skills/bounded-adjudication
 ```
 
-The skill loads automatically. To ensure continuity across sessions, add a reference in your project's `CLAUDE.md`:
+To ensure continuity across sessions, add a reference in your project's `CLAUDE.md`:
 
 ```
 Bounded adjudication setup is in progress. Consult .claude/skills/bounded-adjudication/ and check the worksheet for current state.
