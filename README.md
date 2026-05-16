@@ -1,76 +1,128 @@
 # Bounded Adjudication
 
-[![Agent Skill](https://skills.sh/b/kylejtobin/bounded-adjudication)](https://skills.sh/kylejtobin/bounded-adjudication)
+[![skills.sh](https://skills.sh/b/kylejtobin/bounded-adjudication)](https://skills.sh/kylejtobin/bounded-adjudication)
 
-AI coding agents review your work with full reasoning capability and no constraints on what criteria they apply. They can invent a novel objection on any edit. They can wave something through because the context is long and the pattern looks close enough. Their judgment is unbounded. This is the same problem human reviewers have, except it runs on every single write.
+You corrected the agent. It did it right for three turns. Then it did the thing again. Next session, it never knew the rule existed.
 
-Bounded adjudication is three constraints on a reviewer, human or machine.
+Instructions are suggestions. The model might follow them. It might not. Long context makes it worse. New sessions start from zero. You are negotiating with a stochastic system and hoping for compliance.
 
-You can only reject by citing a specific disallowed shape from a closed rubric. You can only approve a suspicious work product by citing a specific approved mechanism from a closed catalog. You can only defer by escalating to a named authority. The reviewer has full reasoning capability and zero legislative power. It interprets. It does not legislate.
+This skill builds enforcement that actually holds. Hooks that fire on every write, every time, no exceptions. A closed vocabulary of what's allowed and what isn't. The agent reasons freely and is mechanically guaranteed to check its work against your rules before anything lands.
 
-## The Machine
+## What it looks like
 
-Every time a file is written, two things happen.
+Your agent writes a file. A pre-check hook fires before the edit lands:
 
-A pre-check fires against a small set of structural invariants. Shapes that are always wrong regardless of context. Match any pattern, the write is rejected before reasoning is spent. This is not adjudication. This is cost optimization.
+```
+PreToolUse: Edit blocked
 
-A post-check agent reads what was written and evaluates each gate in the rubric. Each gate asks one question about one dimension of the work. For each gate, the agent classifies the work against the closed evidence catalog: allowed shapes, disallowed shapes, approved mechanisms. It returns pass, fail, or escalate. It cannot introduce criteria that are not in the rubric. It cannot waive failures that are not covered by an approved mechanism. When classification is ambiguous, it names the authority that owns the ambiguity and routes to it.
+FAIL — Structural invariant violated
+Shape:  class OrderTranslator
+Rule:   Technology-named classes (*Mapper, *Translator, *Converter, *Adapter)
+        are procedural layers that construction replaces.
+Action: Rejected before reasoning was spent.
+```
 
-That is the entire machine. The reference implementation uses Claude Code hooks. The pattern works anywhere an agent's judgment can be bounded at write time.
+The agent never gets to finish the thought. The pattern was always wrong regardless of context, so the hook killed it immediately. That's not the LLM deciding to reject. That's a deterministic check firing against a closed list of shapes your project declared structurally invalid.
 
-## Vocabulary
+Now the agent writes something subtler. A post-check hook reads the completed edit and evaluates it against your rubric:
 
-A **gate** is a single question about a single dimension of the work.
+```
+PostToolUse: Edit evaluated
 
-A **rubric** is a closed set of observable evidence shapes, allowed and disallowed, organized by gate.
+Gate: Construction Integrity
+  Evidence:  Function builds a dict, passes it to three helpers,
+             then calls Model(**result) at the end.
+  Match:     Disallowed shape — "escaped derivation: logic that
+             should live in model construction extracted into
+             a procedural pipeline"
+  Verdict:   FAIL
 
-An **approved mechanism catalog** is a closed set of sanctioned ways to achieve goals that would otherwise appear suspicious.
+Gate: Program Shape
+  Evidence:  New file follows domain naming, imports flow
+             toward edge.
+  Verdict:   PASS
 
-An **escalation authority** is a named entity that owns an ambiguity the reviewer cannot resolve.
+1 FAIL, 1 PASS, 0 ESCALATE
+```
 
-## Instantiation
+The post-check is an LLM reading your rubric. It understood that building a dict and passing it through helpers before constructing a model is a procedural pipeline — not because it matched a regex, but because it comprehended the pattern. It can only cite evidence shapes from your rubric. It cannot invent new criteria. It interprets. It does not legislate.
 
-Building bounded adjudication for a specific project is domain analysis. The hard part is not writing hooks or rubrics. The hard part is knowing what they should say. Six questions, answered in order, each depending on the one before it.
+## Why this works
 
-**Structural invariants.** What shapes are always wrong? Not usually wrong. Always wrong. These become the pre-check patterns.
+A linter is reliable but doesn't understand. It matches patterns. It can catch `if isinstance(` but can't tell you that the isinstance check is a discriminated union hiding inside a loop.
 
-**Axes of judgment.** What independent dimensions does the work have? Each becomes a gate. One question per gate. The set must be jointly exhaustive and mutually independent.
+An LLM understands but isn't reliable. It can recognize architectural violations through comprehension, but it might miss them, invent false ones, or forget the rules in a long context.
 
-**Evidence shapes.** For each gate, what are the concrete observable shapes that constitute allowed and disallowed work? Principles are not shapes. "Don't violate separation of concerns" is a principle. "A world concept placed under a vendor path because the current caller imports from there" is a shape. The translation from principle to shape is where domain expertise lives.
+Hooks fuse the two. The hook mechanism is deterministic — it fires on every write, guaranteed. The LLM reading the rubric is stochastic — it *understands* whether code violates a rule, not just whether it matches a string. The deterministic shell guarantees the check runs. The stochastic core provides the comprehension.
 
-**Approved mechanisms.** For each suspicious shape, what are all the sanctioned ways to do it correctly? This closes the solution space. A missing mechanism blocks legitimate work. A broken mechanism institutionalizes a defect.
+The result is something neither component produces alone: **reliable comprehension**. A system that understands meaning and is mechanically guaranteed to enforce it. That's a new primitive.
 
-**Genuine ambiguities.** Where does evidence matching fail to resolve classification? Name the ambiguity. Name who owns it. A system that never escalates is lying about its certainty.
+## The vocabulary
 
-**Authority topology.** What is the declared truth against which work is measured? A schema. A spec. A story bible. A graph. Wrong authority topology means the entire system adjudicates against the wrong standard.
+Now that you've seen it work, here are the names for the parts.
 
-## The Skill
+A **gate** is one question about one dimension of the work. "Is every type well-formed?" is a gate. "Does code live where it belongs?" is another. Each gate is independent.
 
-This repository is an installable [Agent Skill](https://agentskills.io) following the [open specification](https://agentskills.io/specification). It guides you through the six questions, building a worksheet collaboratively as you go. The agent reads your code in service of the conversation, forming hypotheses about your project's structural commitments for you to confirm or correct. You drive what gets examined. The agent makes your understanding precise.
+A **rubric** is a closed set of observable evidence shapes — allowed and disallowed — organized by gate. "Function returning dict" is a disallowed shape. "Frozen model with declarative constraints" is an allowed shape. The rubric is everything the reviewer can cite. Nothing else.
 
-When the worksheet is complete and passes a quality gate, the skill generates your hooks configuration and gate rubric directly into your project's `.claude/` directory.
+An **approved mechanism** is a sanctioned exception. A shape that looks disallowed but is correct in a specific, documented circumstance. This closes the solution space. The reviewer can't invent novel justifications for suspicious work.
 
-Two discovery references ship with the skill. **Structural discovery** covers projects where the artifact itself carries structural information: import direction, module boundaries, type signatures, existing linter and CI configurations. **Intentional discovery** covers projects where structural information lives in the author's stated commitments: voice, conventions, rules, genre. Most projects need both.
+An **escalation authority** is a named entity that owns an ambiguity the reviewer can't resolve. Not "this is unclear" — instead: "this is unclear, and the API spec owner decides." A system that never escalates is lying about its certainty.
+
+## Not just code
+
+A story bible is a rubric. Character voice is a gate. "This character wouldn't use modern slang" is a disallowed evidence shape. "Unless they're code-switching in chapter 12" is an approved mechanism. The author is the escalation authority.
+
+Brand voice guidelines. Editorial style guides. Legal review criteria. Compliance checklists. Anywhere an LLM makes judgment calls that should be bounded to a closed vocabulary a human wrote and approved — this pattern applies.
+
+The skill builds the rubric interactively regardless of domain. The six questions are the same whether you're protecting an architecture, a narrative, or a regulatory standard.
+
+## Autonomous loops
+
+The most powerful agent pattern right now is the autonomous loop: an agent that runs repeated cycles with fresh context, progress living in files and git, each iteration starting clean. The problem is that without enforcement, each fresh context is a fresh opportunity to drift.
+
+Bounded adjudication is what makes autonomous loops safe. The agent doesn't need to remember the rules. The hooks fire every time regardless. Fresh context, same constraints. The rubric doesn't degrade across iterations. The enforcement doesn't drift. This is the missing infrastructure for reliable autonomous agents.
+
+## How it works
+
+The skill walks you through six questions, in order, each building on the last:
+
+1. **What shapes are always wrong?** Not usually wrong — always. These become pre-check fast-fails.
+2. **What dimensions does the work have?** Each becomes a gate with one question.
+3. **What are the allowed and disallowed shapes?** Concrete, observable evidence per gate.
+4. **What exceptions are sanctioned?** Approved mechanisms that close the solution space.
+5. **Where does classification fail?** Name the ambiguity. Name who owns it.
+6. **What is the declared truth?** The spec, schema, style guide, or bible being measured against.
+
+The skill reads your project, forms hypotheses, and presents them for you to confirm or correct. You drive what gets examined. The skill makes your understanding precise.
+
+When all six sections are confirmed and pass a quality gate, the skill generates two artifacts into your project:
+
+- **`.claude/settings.json`** — hooks configuration with pre-check fast-fails and a post-check adjudication agent
+- **`.claude/rules/gate-rubrics.md`** — the closed evidence vocabulary your hooks enforce
 
 ## Installation
 
-### As a plugin
+Install the skill, then invoke it and start answering the six questions. The worksheet tracks progress across sessions.
 
-```
-/plugin install bounded-adjudication
+```bash
+npx skills add kylejtobin/bounded-adjudication
 ```
 
-### As a project skill
+Or clone it directly into your project:
 
-```
+```bash
 git clone https://github.com/kylejtobin/bounded-adjudication .claude/skills/bounded-adjudication
 ```
 
-To ensure continuity across sessions, add a reference in your project's `CLAUDE.md`:
+## Specification
 
-```
-Bounded adjudication setup is in progress. Consult .claude/skills/bounded-adjudication/ and check the worksheet for current state.
-```
+This skill follows the [Agent Skills](https://agentskills.io) open standard and works with any compatible agent.
+
+The complete protocol — worksheet template, generation rules, quality gate criteria — lives in [SKILL.md](SKILL.md). Two discovery references ship with the skill for building your rubric:
+
+- [Structural discovery](references/structural-discovery.md) — for projects where code structure carries the information
+- [Intentional discovery](references/intentional-discovery.md) — for projects where commitments are stated
 
 ## License
 

@@ -1,6 +1,6 @@
 ---
 name: bounded-adjudication
-description: "Build constitutional review infrastructure for AI-assisted development. Use when the user wants to constrain agent judgment to closed evidence vocabularies, set up code review gates, create review rubrics, add pre/post edit hooks, or establish bounded adjudication for their project. Triggers include: 'bounded adjudication', 'review gates', 'adjudication rubric', 'constrain judgment', 'evidence shapes', 'code review hooks', or any request to formalize architectural standards into enforceable review infrastructure."
+description: "Make agent judgment reliable by building enforcement hooks with a closed rubric. Use when the user wants to stop their agent from repeating mistakes, set up code review that runs on every write, create review rules the agent can't ignore or invent, or formalize standards for code, content, or creative work into enforceable gates."
 license: MIT
 compatibility: "Claude Code or any agent with hooks support (PreToolUse/PostToolUse)"
 metadata:
@@ -10,7 +10,7 @@ metadata:
 
 # Bounded Adjudication
 
-This skill guides the user through building bounded adjudication infrastructure for their project. The output is a hooks configuration and gate rubric that constrain agent judgment to a closed evidence vocabulary.
+This skill guides the user through building bounded adjudication infrastructure for their project — software, content, creative, or any domain where an agent makes judgment calls. The output is a gate rubric (the closed evidence vocabulary) and, for projects using agent hooks, a hooks configuration that enforces it on every write.
 
 You are a collaborative instrument. You make the user's understanding precise. You do not do the work autonomously. You ask targeted questions, form hypotheses for the user to confirm or correct, and accumulate understanding in a worksheet.
 
@@ -49,10 +49,10 @@ Create this file at `.claude/bounded-adjudication-worksheet.md` on first invocat
 ## Project Context [NOT STARTED]
 
 **Project name:**
-**What it builds:**
-**Primary language/framework:**
-**Key architectural commitments:**
-**Where does truth live in this project:**
+**What it produces:** (software, content, design, documentation, or a mix)
+**Primary medium and tools:** (language/framework, writing tools, design system, etc.)
+**Key commitments:** (architectural, editorial, stylistic, regulatory — what rules has the team or author set)
+**Where does truth live:** (a spec, a schema, a style guide, a story bible, a brand book, a regulatory standard — the authoritative source other work derives from)
 
 ---
 
@@ -137,16 +137,18 @@ What is the declared truth against which work is measured?
 
 ### Project Context
 
-Understand what the project is before asking about invariants. Ask the user:
-- What does this project build?
-- What are the architectural commitments they've already made?
-- Where does truth live? (What is the authoritative source that other things derive from?)
+Understand what the project produces before asking about invariants. Ask the user:
+- What does this project produce? (Software, content, design, a mix)
+- What commitments have they already made? (Architectural, editorial, stylistic, regulatory)
+- Where does truth live? (What is the authoritative source that other work derives from?)
 
-If the user points you at code, read it to form hypotheses. "It looks like your domain models live here and your vendor integrations live here. Is that the ownership boundary?" is better than "tell me about your architecture."
+Adapt your language to the domain. For software: "It looks like your domain models live here and your vendor integrations live here. Is that the ownership boundary?" For content: "It sounds like the style guide governs voice and the story bible governs continuity. Are those separate concerns?" For design: "The component library defines allowed compositions. Is that the authority, or does the brand book override it?"
 
 ### 1. Structural Invariants
 
 These are fast-fail patterns. The pre-check fires them before reasoning is spent. Every invariant must be a shape that is always wrong. Test each candidate: can you name a legitimate case where this shape is correct? If yes, it is not an invariant. It may be a disallowed evidence shape for a gate instead.
+
+In software, invariants are structural: bare primitives as field types, functions returning dicts, technology-named classes. In content, invariants are formal: second person in a third-person narrative, passive voice in a brand that requires active, a heading style that violates the style guide. In design, invariants are compositional: a component nesting pattern that breaks the design system, a color outside the palette. The test is the same regardless of domain: is this always wrong, or only usually wrong?
 
 ### 2. Axes of Judgment
 

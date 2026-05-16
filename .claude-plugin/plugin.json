@@ -1,7 +1,7 @@
 {
     "name": "bounded-adjudication",
     "version": "1.0.0",
-    "description": "Build constitutional review infrastructure for AI-assisted development. Constrain agent judgment to closed evidence vocabularies instead of vibes.",
+    "description": "Make your agent's judgment reliable. Build hooks that enforce a closed rubric on every write — the agent reasons freely but can only approve or reject by citing specific evidence shapes you defined.",
     "author": {
       "name": "Kyle J. Tobin",
       "url": "https://github.com/kylejtobin"
