@@ -119,10 +119,10 @@ git clone https://github.com/kylejtobin/bounded-adjudication .claude/skills/boun
 
 This skill follows the [Agent Skills](https://agentskills.io) open standard and works with any compatible agent.
 
-The complete protocol — worksheet template, generation rules, quality gate criteria — lives in [SKILL.md](SKILL.md). Two discovery references ship with the skill for building your rubric:
+The complete protocol — worksheet template, generation rules, quality gate criteria — lives in [SKILL.md](skills/bounded-adjudication/SKILL.md). Two discovery references ship with the skill for building your rubric:
 
-- [Structural discovery](references/structural-discovery.md) — for projects where code structure carries the information
-- [Intentional discovery](references/intentional-discovery.md) — for projects where commitments are stated
+- [Structural discovery](skills/bounded-adjudication/references/structural-discovery.md) — for projects where code structure carries the information
+- [Intentional discovery](skills/bounded-adjudication/references/intentional-discovery.md) — for projects where commitments are stated
 
 ## License
 

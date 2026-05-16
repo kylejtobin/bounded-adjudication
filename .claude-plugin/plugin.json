@@ -8,6 +8,5 @@
     },
     "repository": "https://github.com/kylejtobin/bounded-adjudication",
     "license": "MIT",
-    "keywords": ["agent-skills", "code-review", "hooks", "adjudication", "rubric"],
-    "skills": ["./"]
+    "keywords": ["agent-skills", "code-review", "hooks", "adjudication", "rubric"]
   }
