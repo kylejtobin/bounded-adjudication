@@ -103,11 +103,20 @@ When all six sections are confirmed and pass a quality gate, the skill generates
 
 ## Installation
 
+### Claude Code plugin
+
+```
+/plugin marketplace add kylejtobin/bounded-adjudication
+/plugin install bounded-adjudication@bounded-adjudication
+```
+
+### Any agent via skills.sh
+
 ```bash
 npx skills add kylejtobin/bounded-adjudication
 ```
 
-Or clone it directly into your project:
+### Manual clone
 
 ```bash
 git clone https://github.com/kylejtobin/bounded-adjudication .claude/skills/bounded-adjudication

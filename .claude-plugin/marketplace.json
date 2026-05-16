@@ -1,0 +1,26 @@
+{
+  "name": "bounded-adjudication",
+  "owner": {
+    "name": "Kyle J. Tobin",
+    "email": "tobin.kyle@gmail.com"
+  },
+  "description": "Make agent judgment reliable with enforcement hooks and closed rubrics",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "bounded-adjudication",
+      "source": ".",
+      "description": "Make your agent's judgment reliable. Build hooks that enforce a closed rubric on every write — the agent reasons freely but can only approve or reject by citing specific evidence shapes you defined.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Kyle J. Tobin"
+      },
+      "homepage": "https://github.com/kylejtobin/bounded-adjudication",
+      "repository": "https://github.com/kylejtobin/bounded-adjudication",
+      "license": "MIT",
+      "keywords": ["agent-skills", "code-review", "hooks", "adjudication", "rubric"],
+      "category": "development",
+      "tags": ["enforcement", "hooks", "review", "rubric", "autonomous-agents"]
+    }
+  ]
+}
