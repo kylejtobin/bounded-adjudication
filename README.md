@@ -103,8 +103,6 @@ When all six sections are confirmed and pass a quality gate, the skill generates
 
 ## Installation
 
-Install the skill, then invoke it and start answering the six questions. The worksheet tracks progress across sessions.
-
 ```bash
 npx skills add kylejtobin/bounded-adjudication
 ```
@@ -114,6 +112,25 @@ Or clone it directly into your project:
 ```bash
 git clone https://github.com/kylejtobin/bounded-adjudication .claude/skills/bounded-adjudication
 ```
+
+## Usage
+
+After installing, invoke the skill in your agent:
+
+```
+/bounded-adjudication
+```
+
+The skill opens a collaborative conversation. It asks you questions about your project — what it produces, what rules you've set, where truth lives — and builds a worksheet as you go. It reads your code or content when you point it at something, forms hypotheses about your project's commitments, and presents them for you to confirm or correct. You drive. The skill makes your understanding precise.
+
+The worksheet is saved at `.claude/bounded-adjudication-worksheet.md`. You don't need to finish in one session. Come back any time — the skill picks up where you left off, resuming at the first section you haven't confirmed yet. If later work reveals that an earlier decision was wrong, the skill can reopen that section.
+
+When all six sections are confirmed and pass a quality gate, the skill generates your enforcement infrastructure:
+
+- **`.claude/settings.json`** — hooks that fire on every write (pre-check fast-fails and post-check adjudication)
+- **`.claude/rules/gate-rubrics.md`** — the closed evidence vocabulary your hooks enforce
+
+From that point on, every edit the agent makes is checked against your rubric automatically. You can revisit the skill later to refine gates, add approved mechanisms, or adjust evidence shapes as your project evolves.
 
 ## Specification
 
